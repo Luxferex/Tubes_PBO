@@ -1,37 +1,57 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-const Databuku = () => {
-  // Data buku contoh, Anda bisa menggantinya dengan data nyata dari API atau Redux
-  const books = [
-    { id: 1, title: 'React for Beginners', author: 'John Doe', year: 2020 },
-    { id: 2, title: 'JavaScript Mastery', author: 'Jane Smith', year: 2021 },
-    { id: 3, title: 'Advanced CSS', author: 'Ali Zaid', year: 2022 },
-  ];
+const DataBuku = () => {
+  const [books, setBooks] = useState([]); // State untuk menyimpan data buku
+  const [loading, setLoading] = useState(true); // State untuk menandai loading
+  const [error, setError] = useState(null); // State untuk error handling
+
+  // Fungsi untuk mengambil data dari backend
+  const fetchBooks = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/buku'); // Endpoint backend
+      if (!response.ok) {
+        throw new Error('Gagal mengambil data');
+      }
+      const data = await response.json();
+      setBooks(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBooks();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="overflow-x-auto w-full">
-      <table className="min-w-full table-auto">
-        <thead className="bg-gray-800 text-white">
-          <tr>
-            <th className="px-4 py-2">ID</th>
-            <th className="px-4 py-2">Title</th>
-            <th className="px-4 py-2">Author</th>
-            <th className="px-4 py-2">Year</th>
+    <table className="table-auto w-full border-collapse border border-gray-300">
+      <thead>
+        <tr>
+          <th className="border border-gray-300 px-4 py-2">No</th>
+          <th className="border border-gray-300 px-4 py-2">Judul</th>
+          <th className="border border-gray-300 px-4 py-2">Penulis</th>
+          <th className="border border-gray-300 px-4 py-2">Kategori</th>
+          <th className="border border-gray-300 px-4 py-2">Tahun Terbit</th>
+        </tr>
+      </thead>
+      <tbody>
+        {books.map((book, index) => (
+          <tr key={book.id}>
+            <td className="border border-gray-300 px-4 py-2">{index + 1}</td>
+            <td className="border border-gray-300 px-4 py-2">{book.judul}</td>
+            <td className="border border-gray-300 px-4 py-2">{book.penulis}</td>
+            <td className="border border-gray-300 px-4 py-2">{book.kategori}</td>
+            <td className="border border-gray-300 px-4 py-2">{book.tahunTerbit}</td>
           </tr>
-        </thead>
-        <tbody>
-          {books.map((book) => (
-            <tr key={book.id} className="border-b">
-              <td className="px-4 py-2">{book.id}</td>
-              <td className="px-4 py-2">{book.title}</td>
-              <td className="px-4 py-2">{book.author}</td>
-              <td className="px-4 py-2">{book.year}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        ))}
+      </tbody>
+    </table>
   );
 };
 
-export default Databuku;
+export default DataBuku;

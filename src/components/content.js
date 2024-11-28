@@ -55,7 +55,7 @@ const Content = () => {
   };
 
   return (
-    <div className="flex-1 p-4" style={{ marginLeft: '28  0px' }}>
+    <div className="flex-1 p-4" style={{ marginLeft: '280px' }}>
       <div className="h-full flex flex-col bg-white">{renderContent()}</div>
     </div>
   );
