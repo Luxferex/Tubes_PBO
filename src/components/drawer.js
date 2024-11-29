@@ -16,12 +16,12 @@ const Drawer = () => {
   };
 
   return (
-    <div className="bg-gray-800 text-white p-4 fixed h-full w-64">
+    <div className="bg-gray-800 text-white p-4 fixed h-full w-64 overflow-y-auto">
       <div className="flex items-center space-x-4 mb-6">
         {/* Foto Profil */}
         <img src="/images/people.png" alt="User" className="w-16 h-16 rounded-full" />
         <div>
-          <div className="font-semibold">Dwi Annisa</div>
+          <div className="font-semibold">Siuuuu</div>
           <div className="text-sm text-gray-400">Administrator</div>
         </div>
       </div>

@@ -1,4 +1,3 @@
-// src/components/Header/Header.js
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'; // Jika menggunakan React Router
@@ -8,7 +7,7 @@ const Header = () => {
   const user = useSelector((state) => state.user.user);
 
   return (
-    <header className="flex justify-between items-center p-3 bg-blue-900 text-white">
+    <header className="flex justify-between items-center p-3 bg-blue-900 text-white fixed top-0 left-0 right-0 z-10">
       {/* Logo dan Teks */}
       <div className="flex items-center space-x-4">
         {/* Logo Gambar */}
