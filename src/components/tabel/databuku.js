@@ -40,18 +40,15 @@ const DataBuku = () => {
         </tr>
       </thead>
       <tbody>
-        {books.map((book, index) => {
-          const kekurangan = book.stok_dibutuhkan - book.stok_tersedia; // Hitung kekurangan
-          return (
-            <tr key={book.judul}>
-              <td className="border border-gray-300 px-1 py-2 text-center align-middle">{index + 1}</td>
-              <td className="border border-gray-300 px-4 py-2  align-middle">{book.judul}</td>
-              <td className="border border-gray-300 px-4 py-2 text-center align-middle">{book.stok_tersedia}</td>
-              <td className="border border-gray-300 px-4 py-2 text-center align-middle">{book.stok_dibutuhkan}</td>
-              <td className="border border-gray-300 px-4 py-2 text-center align-middle">{kekurangan > 0 ? kekurangan : 'Tidak ada kekurangan'}</td>
-            </tr>
-          );
-        })}
+        {books.map((book, index) => (
+          <tr key={book.judul}>
+            <td className="border border-gray-300 px-1 py-2 text-center align-middle">{index + 1}</td>
+            <td className="border border-gray-300 px-4 py-2 align-middle">{book.judul}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center align-middle">{book.stok_Tersedia}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center align-middle">{book.stok_Dibutuhkan}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center align-middle">{book.kekurangan}</td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );

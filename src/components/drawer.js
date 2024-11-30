@@ -16,8 +16,8 @@ const Drawer = () => {
   };
 
   return (
-    <div className="bg-gray-800 text-white p-4 fixed h-full w-64 overflow-y-auto">
-      <div className="flex items-center space-x-4 mb-6">
+    <div className="bg-gray-800 text-white p-4 fixed h-full w-64 overflow-y-auto pt-20">
+      <div className="flex items-center space-x-4 mb">
         {/* Foto Profil */}
         <img src="/images/people.png" alt="User" className="w-16 h-16 rounded-full" />
         <div>
@@ -27,7 +27,7 @@ const Drawer = () => {
       </div>
 
       {/* Menu */}
-      <div className="space-y-4">
+      <div className="space-y-4 pt-8">
         {/* Data Buku */}
         <button className="w-full text-left text-gray-200 hover:bg-gray-700 p-2 rounded flex items-center justify-start" onClick={handleSubMenuToggle}>
           <FaBook className="mr-2" />

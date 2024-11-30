@@ -26,7 +26,7 @@ const Content = () => {
       case 'databuku':
         return (
           <div className="flex flex-col h-full bg-white rounded-md shadow-md p-4">
-            <h2 className="text-2xl font-semibold mb-4">Data Buku</h2>
+            <h2 className="text-2xl font-semibold mb-4 pb-10">Data Buku</h2>
             {/* ActionBar berada di bawah judul */}
             <ActionBar onSearch={handleSearch} onNewReport={handleNewReport} onExport={handleExport} searchPlaceholder="Search for books..." />
             {/* Tabel Data Buku yang dapat di-scroll */}
@@ -37,20 +37,20 @@ const Content = () => {
         );
       case 'dataMajalah':
         return (
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col h-full bg-white rounded-md shadow-md p-4">
+            <h2 className="text-2xl font-semibold mb-4 pb-10">Data Majalah</h2>
             <ActionBar onSearch={handleSearch} onNewReport={handleNewReport} onExport={handleExport} searchPlaceholder="Search for magazines..." />
-            <h2 className="text-2xl font-semibold mb-4">Data Majalah</h2>
-            <div className="flex-1 overflow-auto">
+            <div className="overflow-auto bg-gray-50 p-4 rounded-md shadow-sm">
               <DataMajalah />
             </div>
           </div>
         );
       case 'dataJurnal':
         return (
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col h-full bg-white rounded-md shadow-md p-4">
+            <h2 className="text-2xl font-semibold mb-4 pb-10">Data Jurnal</h2>
             <ActionBar onSearch={handleSearch} onNewReport={handleNewReport} onExport={handleExport} searchPlaceholder="Search for journals..." />
-            <h2 className="text-2xl font-semibold mb-4">Data Jurnal</h2>
-            <div className="flex-1 overflow-auto">
+            <div className="overflow-auto bg-gray-50 p-4 rounded-md shadow-sm">
               <DataJurnal />
             </div>
           </div>
