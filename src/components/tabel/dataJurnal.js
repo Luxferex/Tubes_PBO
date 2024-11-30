@@ -32,21 +32,21 @@ const DataJurnal = () => {
     <table className="table-auto w-full border-collapse border border-gray-300">
       <thead>
         <tr>
-          <th className="border border-gray-300 px-4 py-2">No</th>
+          <th className="border border-gray-300 px-1 py-2">No</th>
           <th className="border border-gray-300 px-4 py-2">Judul</th>
-          <th className="border border-gray-300 px-4 py-2">Penulis</th>
-          <th className="border border-gray-300 px-4 py-2">Kategori</th>
-          <th className="border border-gray-300 px-4 py-2">Tahun Terbit</th>
+          <th className="border border-gray-300 px-4 py-2">Stok Tersedia</th>
+          <th className="border border-gray-300 px-4 py-2">Stok dibutuhkan</th>
+          <th className="border border-gray-300 px-4 py-2">Kekurangan</th>
         </tr>
       </thead>
       <tbody>
         {journals.map((journal, index) => (
           <tr key={journal.id}>
-            <td className="border border-gray-300 px-4 py-2">{index + 1}</td>
+            <td className="border border-gray-300 px-1 py-2 text-center align-middle">{index + 1}</td>
             <td className="border border-gray-300 px-4 py-2">{journal.judul}</td>
-            <td className="border border-gray-300 px-4 py-2">{journal.penulis}</td>
-            <td className="border border-gray-300 px-4 py-2">{journal.kategori}</td>
-            <td className="border border-gray-300 px-4 py-2">{journal.tahunTerbit}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center align-middle">{journal.stok_Tersedia}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center align-middle">{journal.stok_Kebutuhan}</td>
+            <td className="border border-gray-300 px-4 py-2 text-center align-middle">{journal.kekurangan}</td>
           </tr>
         ))}
       </tbody>
