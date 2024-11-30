@@ -9,18 +9,18 @@ public class Jurnal {
     @Id
     private String id;
     private String judul;
-    private String penulis;
-    private int tahunTerbit;
-    private String kategori;
+    private int stok_Tersedia;
+    private int stok_Kebutuhan;
+    private int kekurangan;
 
     // Constructors
     public Jurnal() {}
 
-    public Jurnal(String judul, String penulis, int tahunTerbit, String kategori) {
+    public Jurnal(String judul, int stok_Tersedia, int stok_Kebutuhan) {
         this.judul = judul;
-        this.penulis = penulis;
-        this.tahunTerbit = tahunTerbit;
-        this.kategori = kategori;
+        this.stok_Tersedia = stok_Tersedia;
+        this.stok_Kebutuhan = stok_Kebutuhan;
+        this.kekurangan = stok_Kebutuhan - stok_Tersedia; // Otomatis menghitung kekurangan
     }
 
     // Getters and Setters
@@ -40,27 +40,34 @@ public class Jurnal {
         this.judul = judul;
     }
 
-    public String getPenulis() {
-        return penulis;
+    public int getStok_Tersedia() {
+        return stok_Tersedia;
     }
 
-    public void setPenulis(String penulis) {
-        this.penulis = penulis;
+    public void setStok_Tersedia(int stok_Tersedia) {
+        this.stok_Tersedia = stok_Tersedia;
+        updateKekurangan(); // Recalculate kekurangan
     }
 
-    public int getTahunTerbit() {
-        return tahunTerbit;
+    public int getStok_Kebutuhan() {
+        return stok_Kebutuhan;
     }
 
-    public void setTahunTerbit(int tahunTerbit) {
-        this.tahunTerbit = tahunTerbit;
+    public void setStok_Kebutuhan(int stok_Kebutuhan) {
+        this.stok_Kebutuhan = stok_Kebutuhan;
+        updateKekurangan(); // Recalculate kekurangan
     }
 
-    public String getKategori() {
-        return kategori;
+    public String getKekurangan() {
+        if (kekurangan > 0) {
+            return String.valueOf(kekurangan);  // Menampilkan nilai kekurangan
+        } else {
+            return "Tidak ada kekurangan"; // Menampilkan pesan jika tidak ada kekurangan
+        }
     }
 
-    public void setKategori(String kategori) {
-        this.kategori = kategori;
+    // Method untuk menghitung kekurangan
+    private void updateKekurangan() {
+        this.kekurangan = stok_Kebutuhan - stok_Tersedia; // Otomatis menghitung kekurangan
     }
 }
