@@ -1,26 +1,35 @@
 package com.example.backend_pbo.model;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "buku")
 public class Buku {
 
+    @Id
+    private String id;
     private String judul;
-
-    private int stok_tersedia;
-
-    private int stok_dibutuhkan;
-
+    private int stok_Tersedia;
+    private int stok_Dibutuhkan;
     private int kekurangan;
 
     // Constructors
     public Buku() {}
 
-    public Buku(String judul, int stok_tersedia, int stok_dibutuhkan, int kekurangan) {
+    public Buku(String judul, int stok_Tersedia, int stok_Dibutuhkan) {
         this.judul = judul;
-        this.stok_tersedia = stok_tersedia;
-        this.stok_dibutuhkan = stok_dibutuhkan;
-        this.kekurangan = kekurangan;
+        this.stok_Tersedia = stok_Tersedia;
+        this.stok_Dibutuhkan = stok_Dibutuhkan;
+        this.kekurangan = stok_Dibutuhkan - stok_Tersedia; // Otomatis menghitung kekurangan
+    }
+
+    // Getters and Setters
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     // Getters dan Setters
@@ -32,27 +41,34 @@ public class Buku {
         this.judul = judul;
     }
 
-    public int getstok_tersedia() {
-        return stok_tersedia;
+    public int getStok_Tersedia() {
+        return stok_Tersedia;
     }
 
-    public void setstok_tersedia(int stok_tersedia) {
-        this.stok_tersedia = stok_tersedia;
+    public void setStok_Tersedia(int stok_Tersedia) {
+        this.stok_Tersedia = stok_Tersedia;
+        updateKekurangan(); // Recalculate kekurangan
     }
 
-    public int getstok_dibutuhkan() {
-        return stok_dibutuhkan;
+    public int getstok_Dibutuhkan() {
+        return stok_Dibutuhkan;
     }
 
-    public void setstok_dibutuhkan(int stok_dibutuhkan) {
-        this.stok_dibutuhkan = stok_dibutuhkan;
+    public void setstok_Dibutuhkan(int stok_Dibutuhkan) {
+        this.stok_Dibutuhkan = stok_Dibutuhkan;
+        updateKekurangan(); // Recalculate kekurangan
     }
 
-    public int getKekurangan() {
-        return kekurangan;
+    public String getKekurangan() {
+        if (kekurangan > 0) {
+            return String.valueOf(kekurangan);  // Menampilkan nilai kekurangan
+        } else {
+            return "Tidak ada kekurangan"; // Menampilkan pesan jika tidak ada kekurangan
+        }
     }
 
-    public void setKekurangan(int kekurangan) {
-        this.kekurangan = kekurangan;
+    // Method untuk menghitung kekurangan
+    private void updateKekurangan() {
+        this.kekurangan = stok_Dibutuhkan - stok_Tersedia; // Otomatis menghitung kekurangan
     }
 }
