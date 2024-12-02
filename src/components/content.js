@@ -30,7 +30,7 @@ const Content = () => {
             {/* ActionBar berada di bawah judul */}
             <ActionBar onSearch={handleSearch} onNewReport={handleNewReport} onExport={handleExport} searchPlaceholder="Search for books..." />
             {/* Tabel Data Buku yang dapat di-scroll */}
-            <div className="overflow-auto bg-gray-50 p-4 rounded-md shadow-sm">
+            <div className="overflow-auto bg-gray-50   rounded-md shadow-sm">
               <DataBuku />
             </div>
           </div>
