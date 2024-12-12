@@ -14,7 +14,7 @@ public class Majalah {
     private int stokTersedia;
     @Field("stok_Kebutuhan")
     private int stokKebutuhan;
-    private String kekurangan;  // Ubah menjadi String agar bisa menampilkan teks
+    private int kekurangan; 
 
     // Constructors
     public Majalah() {}
@@ -23,7 +23,7 @@ public class Majalah {
         this.judul = judul;
         this.stokTersedia = stokTersedia;
         this.stokKebutuhan = stokKebutuhan;
-        this.kekurangan = calculateKekurangan(); // Menghitung kekurangan saat object dibuat
+        this.kekurangan = stokKebutuhan - stokTersedia; // Menghitung kekurangan saat object dibuat
     }
 
     // Getters and Setters
@@ -62,19 +62,15 @@ public class Majalah {
     }
 
     public String getKekurangan() {
-        return kekurangan;
-    }
-
-    private void updateKekurangan() {
-        this.kekurangan = calculateKekurangan();  // Recalculate kekurangan
-    }
-
-    private String calculateKekurangan() {
-        int kekurangan = stokKebutuhan - stokTersedia;
-        // Jika kekurangan <= 0, tampilkan "Tidak ada kekurangan"
-        if (kekurangan <= 0) {
-            return "Tidak ada kekurangan";
+        if (kekurangan > 0) {
+            return String.valueOf(kekurangan);  // Menampilkan nilai kekurangan
+        } else {
+            return "Tidak ada kekurangan"; // Menampilkan pesan jika tidak ada kekurangan
         }
-        return String.valueOf(kekurangan); // Menampilkan kekurangan dalam angka jika ada
+    }
+
+    // Method untuk menghitung kekurangan
+    private void updateKekurangan() {
+        this.kekurangan = stokKebutuhan - stokTersedia; // Otomatis menghitung kekurangan
     }
 }

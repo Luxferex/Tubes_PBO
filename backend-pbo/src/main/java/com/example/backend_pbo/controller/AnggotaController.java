@@ -13,36 +13,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.backend_pbo.model.Majalah;
-import com.example.backend_pbo.service.MajalahService;
+import com.example.backend_pbo.model.Anggota;
+import com.example.backend_pbo.service.AnggotaService;
 
 @RestController
-@RequestMapping("/majalah")
+@RequestMapping("/anggota")
 @CrossOrigin(origins = "http://localhost:3000")
-public class MajalahController {
+public class AnggotaController {
 
     @Autowired
-    private MajalahService majalahService;
+    private AnggotaService anggotaService;
 
+    // Mendapatkan semua anggota
     @GetMapping
-    public List<Majalah> getAllMajalah() {
-        return majalahService.getAllMajalah();
+    public List<Anggota> getAllAnggota() {
+        return anggotaService.getAllAnggota();
     }
 
+    // Menambahkan anggota baru
     @PostMapping
-    public Majalah createMajalah(@RequestBody Majalah majalah) {
-        return majalahService.saveMajalah(majalah);
+    public Anggota createAnggota(@RequestBody Anggota anggota) {
+        return anggotaService.saveAnggota(anggota);
     }
 
-    // Menghapus majalah berdasarkan ID
+    // Menghapus anggota berdasarkan ID
     @DeleteMapping("/{id}")
-    public void deleteMajalah(@PathVariable String id) {
-        majalahService.deleteMajalah(id);
+    public void deleteAnggota(@PathVariable String id) {
+        anggotaService.deleteAnggota(id);
     }
 
-    // Memperbarui majalah berdasarkan ID
+    // Memperbarui anggota berdasarkan ID
     @PutMapping("/{id}")
-    public Majalah updateMajalah(@PathVariable String id, @RequestBody Majalah majalah) {
-        return majalahService.updateMajalah(id, majalah);
+    public Anggota updateAnggota(@PathVariable String id, @RequestBody Anggota anggota) {
+        return anggotaService.updateAnggota(id, anggota);
     }
 }

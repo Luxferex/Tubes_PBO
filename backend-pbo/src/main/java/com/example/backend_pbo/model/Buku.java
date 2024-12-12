@@ -20,10 +20,10 @@ public class Buku {
         this.judul = judul;
         this.stok_Tersedia = stok_Tersedia;
         this.stok_Dibutuhkan = stok_Dibutuhkan;
-        this.kekurangan = stok_Dibutuhkan - stok_Tersedia; // Otomatis menghitung kekurangan
+        updateKekurangan(); // Hitung kekurangan saat konstruksi
     }
 
-    // Getters and Setters
+    // Getters dan Setters
     public String getId() {
         return id;
     }
@@ -32,7 +32,6 @@ public class Buku {
         this.id = id;
     }
 
-    // Getters dan Setters
     public String getJudul() {
         return judul;
     }
@@ -47,28 +46,28 @@ public class Buku {
 
     public void setStok_Tersedia(int stok_Tersedia) {
         this.stok_Tersedia = stok_Tersedia;
-        updateKekurangan(); // Recalculate kekurangan
+        updateKekurangan(); // Hitung ulang kekurangan
     }
 
-    public int getstok_Dibutuhkan() {
+    public int getStok_Dibutuhkan() {
         return stok_Dibutuhkan;
     }
 
-    public void setstok_Dibutuhkan(int stok_Dibutuhkan) {
+    public void setStok_Dibutuhkan(int stok_Dibutuhkan) {
         this.stok_Dibutuhkan = stok_Dibutuhkan;
-        updateKekurangan(); // Recalculate kekurangan
+        updateKekurangan(); // Hitung ulang kekurangan
     }
 
     public String getKekurangan() {
-        if (kekurangan > 0) {
-            return String.valueOf(kekurangan);  // Menampilkan nilai kekurangan
-        } else {
-            return "Tidak ada kekurangan"; // Menampilkan pesan jika tidak ada kekurangan
+        // Mengembalikan string jika kekurangan <= 0
+        if (kekurangan <= 0) {
+            return "Tidak ada kekurangan";
         }
+        return String.valueOf(kekurangan);
     }
 
     // Method untuk menghitung kekurangan
     private void updateKekurangan() {
-        this.kekurangan = stok_Dibutuhkan - stok_Tersedia; // Otomatis menghitung kekurangan
+        this.kekurangan = stok_Dibutuhkan - stok_Tersedia;
     }
 }
