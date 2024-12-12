@@ -11,7 +11,7 @@ const App = () => {
         <Route path="/" element={<Login />} />
         <Route path="/regis" element={<Register />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/homeUser" element={<HomeUser />}></Route>
+        <Route path="/homeUser" element={<HomeUser />} />
 
         {/* Tambahkan rute lainnya jika diperlukan */}
       </Routes>
