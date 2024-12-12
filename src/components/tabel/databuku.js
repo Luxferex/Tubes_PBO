@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Modal from '../modal';
+import Modal from '../home/modal';
 
 const DataBuku = () => {
   const [books, setBooks] = useState([]); // State untuk menyimpan data buku

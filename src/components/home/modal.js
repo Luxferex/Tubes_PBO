@@ -4,7 +4,7 @@ const Modal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
   const [formData, setFormData] = useState({
     judul: '',
     stok_Tersedia: 0,
-    stok_Dibutuhkan: 0,
+    stok_Dibutuhkan: 0, // Pastikan sesuai dengan format backend
   });
 
   // Update form data jika ada `initialData` (untuk update)
@@ -28,7 +28,7 @@ const Modal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Pastikan formData mengandung id jika update
+    // Tambahkan id jika data berasal dari initialData
     const dataToSubmit = initialData ? { ...formData, id: initialData.id } : formData;
 
     onSubmit(dataToSubmit); // Kirim ke parent untuk handle logika update atau tambah
@@ -39,7 +39,7 @@ const Modal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white rounded-lg p-6 w-1/3">
-        <h2 className="text-xl font-bold mb-4">{initialData ? 'Perbarui Buku' : 'Tambah Buku Baru'}</h2>
+        <h2 className="text-xl font-bold mb-4">{initialData ? 'Perbarui data' : 'Tambah data Baru'}</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-bold mb-2">Judul</label>

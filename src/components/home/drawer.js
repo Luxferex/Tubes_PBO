@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaBook, FaUsers, FaFileAlt, FaFolder } from 'react-icons/fa'; // Import ikon
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedMenu, toggleSubMenu } from '../state/uiSlice'; // Pastikan Anda mengimpor action Redux
+import { setSelectedMenu, toggleSubMenu } from '../../state/uiSlice'; // Pastikan Anda mengimpor action Redux
 
 const Drawer = () => {
   const dispatch = useDispatch();
