@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom'; // Jika menggunakan React Router
 
 const Header = () => {
   // Mengambil data user dari Redux store

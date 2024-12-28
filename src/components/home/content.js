@@ -74,19 +74,7 @@ const Content = () => {
             </div>
           </div>
         );
-      case 'transaksi':
-        return (
-          <div className="flex flex-col h-full">
-            <ActionBar
-              onSearch={handleSearch}
-              onNewReport={() => handleNewReport('transaksi')} // For 'transaksi'
-              onExport={handleExport}
-              searchPlaceholder="Search for transactions..."
-              dataType="transaksi" // Pass the data type here
-            />
-            <h2 className="text-2xl font-semibold mb-4">Transaksi</h2>
-          </div>
-        );
+
       case 'laporan':
         return (
           <div className="flex flex-col h-full">

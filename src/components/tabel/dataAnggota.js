@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Modal from '../home/modal';
+import PopUpCRUD from '../home/popUpCRUD'; // Menggunakan nama baru untuk modal
+import { fetchData, createData, updateData, deleteData } from '../CRUD'; // Menggunakan utils CRUD
 
 const DataAnggota = () => {
   const [anggota, setAnggota] = useState([]); // State untuk menyimpan data anggota
@@ -9,12 +10,10 @@ const DataAnggota = () => {
   const [selectedAnggota, setSelectedAnggota] = useState(null); // Anggota yang dipilih untuk update
 
   // Fetch data anggota
-  const fetchAnggota = async () => {
+  const loadAnggota = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:8080/anggota');
-      if (!response.ok) throw new Error('Gagal mengambil data anggota');
-      const data = await response.json();
+      const data = await fetchData('anggota'); // Menggunakan fungsi fetchData dari utils
       setAnggota(data);
     } catch (err) {
       setError(err.message);
@@ -23,17 +22,39 @@ const DataAnggota = () => {
     }
   };
 
+  // Handle tambah atau edit anggota
+  const handleModalSubmit = async (formData) => {
+    try {
+      if (formData.id) {
+        // Update anggota
+        await updateData('anggota', formData.id, formData);
+        alert('Data anggota berhasil diperbarui!');
+      } else {
+        // Tambah anggota baru
+        await createData('anggota', formData);
+        alert('Data anggota berhasil ditambahkan!');
+      }
+
+      loadAnggota(); // Refresh data setelah operasi selesai
+    } catch (err) {
+      console.error('Gagal menyimpan data:', err);
+      alert('Terjadi kesalahan saat menyimpan data.');
+    } finally {
+      setIsModalOpen(false); // Tutup modal
+      setSelectedAnggota(null); // Reset anggota yang dipilih
+    }
+  };
+
   // Handle delete anggota
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus anggota ini?')) {
       try {
-        const response = await fetch(`http://localhost:8080/anggota/${id}`, {
-          method: 'DELETE',
-        });
-        if (!response.ok) throw new Error('Gagal menghapus anggota');
-        fetchAnggota(); // Refresh data setelah berhasil
+        await deleteData('anggota', id); // Menggunakan fungsi deleteData dari utils
+        alert('Data anggota berhasil dihapus!');
+        loadAnggota(); // Refresh data setelah operasi selesai
       } catch (err) {
         console.error('Gagal menghapus anggota:', err);
+        alert('Terjadi kesalahan saat menghapus data.');
       }
     }
   };
@@ -44,32 +65,14 @@ const DataAnggota = () => {
     setIsModalOpen(true); // Buka modal
   };
 
-  const handleModalSubmit = async (formData) => {
-    try {
-      const url = formData.id
-        ? `http://localhost:8080/anggota/${formData.id}` // Untuk update
-        : 'http://localhost:8080/anggota'; // Untuk tambah baru
-
-      const method = formData.id ? 'PUT' : 'POST'; // PUT jika update, POST jika tambah baru
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) throw new Error('Gagal menyimpan data anggota');
-
-      fetchAnggota(); // Refresh data setelah sukses
-    } catch (err) {
-      console.error('Gagal menyimpan data:', err);
-    } finally {
-      setIsModalOpen(false); // Tutup modal
-      setSelectedAnggota(null); // Reset anggota yang dipilih
-    }
+  // Handle buka modal untuk tambah baru
+  const handleAdd = () => {
+    setSelectedAnggota(null); // Kosongkan data untuk mode tambah baru
+    setIsModalOpen(true); // Buka modal
   };
 
   useEffect(() => {
-    fetchAnggota();
+    loadAnggota();
   }, []);
 
   if (loading) return <p className="text-center">Loading...</p>;
@@ -77,6 +80,10 @@ const DataAnggota = () => {
 
   return (
     <div>
+      <button onClick={handleAdd} className="mb-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+        Tambah Anggota
+      </button>
+
       <table className="table-auto w-full border-collapse border border-gray-300">
         <thead>
           <tr>
@@ -88,17 +95,17 @@ const DataAnggota = () => {
           </tr>
         </thead>
         <tbody>
-          {anggota.map((anggota, index) => (
-            <tr key={anggota.id}>
+          {anggota.map((item, index) => (
+            <tr key={item.id}>
               <td className="border border-gray-300 px-1 py-2 text-center">{index + 1}</td>
-              <td className="border border-gray-300 px-4 py-2 text-center">{anggota.nama}</td>
-              <td className="border border-gray-300 px-4 py-2 text-center">{anggota.jurusan}</td>
-              <td className="border border-gray-300 px-4 py-2 text-center">{anggota.nim}</td>
+              <td className="border border-gray-300 px-4 py-2 text-center">{item.nama}</td>
+              <td className="border border-gray-300 px-4 py-2 text-center">{item.jurusan}</td>
+              <td className="border border-gray-300 px-4 py-2 text-center">{item.nim}</td>
               <td className="border border-gray-300 px-4 py-2 text-center">
-                <button onClick={() => handleEdit(anggota)} className="mr-2 text-blue-500 hover:text-blue-700" title="Edit">
+                <button onClick={() => handleEdit(item)} className="mr-2 text-blue-500 hover:text-blue-700" title="Edit">
                   ✏️
                 </button>
-                <button onClick={() => handleDelete(anggota.id)} className="text-red-500 hover:text-red-700" title="Delete">
+                <button onClick={() => handleDelete(item.id)} className="text-red-500 hover:text-red-700" title="Delete">
                   🗑️
                 </button>
               </td>
@@ -106,8 +113,9 @@ const DataAnggota = () => {
           ))}
         </tbody>
       </table>
-      {/* Modal */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleModalSubmit} initialData={selectedAnggota} />
+
+      {/* PopUp CRUD */}
+      <PopUpCRUD isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleModalSubmit} initialData={selectedAnggota} Type="anggota" />
     </div>
   );
 };

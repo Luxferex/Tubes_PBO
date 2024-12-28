@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Modal from '../home/modal';
+import { fetchData, createData, updateData, deleteData } from '../CRUD'; // Import reusable CRUD functions
+import PopUpCRUD from '../home/popUpCRUD'; // Menggunakan nama baru untuk modal
 
 const DataJurnal = () => {
   const [journals, setJournals] = useState([]); // State untuk menyimpan data jurnal
@@ -9,12 +10,10 @@ const DataJurnal = () => {
   const [selectedJournal, setSelectedJournal] = useState(null); // Jurnal yang dipilih untuk update
 
   // Fetch data jurnal
-  const fetchJournals = async () => {
+  const loadJournals = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:8080/jurnal');
-      if (!response.ok) throw new Error('Gagal mengambil data jurnal');
-      const data = await response.json();
+      const data = await fetchData('jurnal'); // Gunakan fetchData seperti di DataBuku
       setJournals(data);
     } catch (err) {
       setError(err.message);
@@ -27,13 +26,12 @@ const DataJurnal = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus jurnal ini?')) {
       try {
-        const response = await fetch(`http://localhost:8080/jurnal/${id}`, {
-          method: 'DELETE',
-        });
-        if (!response.ok) throw new Error('Gagal menghapus jurnal');
-        fetchJournals(); // Refresh data setelah berhasil
+        await deleteData('jurnal', id); // Gunakan deleteData untuk jurnal
+        alert('Jurnal berhasil dihapus!');
+        loadJournals(); // Refresh data setelah berhasil
       } catch (err) {
         console.error('Gagal menghapus jurnal:', err);
+        alert('Terjadi kesalahan saat menghapus data.');
       }
     }
   };
@@ -44,31 +42,23 @@ const DataJurnal = () => {
     setIsModalOpen(true); // Buka modal
   };
 
+  // Handle modal submission
   const handleModalSubmit = async (formData) => {
     try {
-      const url = formData.id
-        ? `http://localhost:8080/jurnal/${formData.id}` // Untuk update
-        : 'http://localhost:8080/jurnal'; // Untuk tambah baru
+      if (formData.id) {
+        // Update existing journal
+        await updateData('jurnal', formData.id, formData);
+        alert('Jurnal berhasil diperbarui!');
+      } else {
+        // Add new journal
+        await createData('jurnal', formData);
+        alert('Jurnal berhasil ditambahkan!');
+      }
 
-      // Pastikan stok_Tersedia dan stok_Kebutuhan adalah angka
-      const dataToSend = {
-        ...formData,
-        stok_Tersedia: parseInt(formData.stok_Tersedia, 10), // Konversi menjadi angka
-        stok_Kebutuhan: parseInt(formData.stok_Kebutuhan, 10), // Konversi menjadi angka
-      };
-
-      const method = formData.id ? 'PUT' : 'POST'; // PUT jika update, POST jika tambah baru
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dataToSend),
-      });
-
-      if (!response.ok) throw new Error('Gagal menyimpan data jurnal');
-
-      fetchJournals(); // Refresh data setelah sukses
+      loadJournals(); // Refresh data setelah operasi berhasil
     } catch (err) {
-      console.error('Gagal menyimpan data:', err);
+      console.error('Gagal menyimpan jurnal:', err);
+      alert('Terjadi kesalahan saat menyimpan jurnal.');
     } finally {
       setIsModalOpen(false); // Tutup modal
       setSelectedJournal(null); // Reset jurnal yang dipilih
@@ -76,7 +66,7 @@ const DataJurnal = () => {
   };
 
   useEffect(() => {
-    fetchJournals();
+    loadJournals(); // Load data saat pertama kali render
   }, []);
 
   if (loading) return <p className="text-center">Loading...</p>;
@@ -84,6 +74,10 @@ const DataJurnal = () => {
 
   return (
     <div>
+      <button onClick={() => setIsModalOpen(true)} className="mb-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+        Tambah Jurnal
+      </button>
+
       <table className="table-auto w-full border-collapse border border-gray-300">
         <thead>
           <tr>
@@ -101,7 +95,7 @@ const DataJurnal = () => {
               <td className="border border-gray-300 px-1 py-2 text-center">{index + 1}</td>
               <td className="border border-gray-300 px-4 py-2">{journal.judul}</td>
               <td className="border border-gray-300 px-4 py-2 text-center">{journal.stok_Tersedia}</td>
-              <td className="border border-gray-300 px-4 py-2 text-center">{journal.stok_Kebutuhan}</td>
+              <td className="border border-gray-300 px-4 py-2 text-center">{journal.stok_Dibutuhkan}</td>
               <td className="border border-gray-300 px-4 py-2 text-center">{journal.kekurangan}</td>
               <td className="border border-gray-300 px-4 py-2 text-center">
                 <button onClick={() => handleEdit(journal)} className="mr-2 text-blue-500 hover:text-blue-700" title="Edit">
@@ -115,8 +109,9 @@ const DataJurnal = () => {
           ))}
         </tbody>
       </table>
-      {/* Modal */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleModalSubmit} initialData={selectedJournal} />
+
+      {/*Pop UP */}
+      <PopUpCRUD isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleModalSubmit} initialData={selectedJournal} type="jurnal" />
     </div>
   );
 };
