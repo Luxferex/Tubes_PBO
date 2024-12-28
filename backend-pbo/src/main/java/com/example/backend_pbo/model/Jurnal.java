@@ -10,17 +10,17 @@ public class Jurnal {
     private String id;
     private String judul;
     private int stok_Tersedia;
-    private int stok_Kebutuhan;
+    private int stok_Dibutuhkan;
     private int kekurangan;
 
     // Constructors
     public Jurnal() {}
 
-    public Jurnal(String judul, int stok_Tersedia, int stok_Kebutuhan) {
+    public Jurnal(String judul, int stok_Tersedia, int stok_Dibutuhkan) {
         this.judul = judul;
         this.stok_Tersedia = stok_Tersedia;
-        this.stok_Kebutuhan = stok_Kebutuhan;
-        this.kekurangan = stok_Kebutuhan - stok_Tersedia; // Otomatis menghitung kekurangan
+        this.stok_Dibutuhkan = stok_Dibutuhkan;
+        this.kekurangan = stok_Dibutuhkan - stok_Tersedia; 
     }
 
     // Getters and Setters
@@ -46,28 +46,28 @@ public class Jurnal {
 
     public void setStok_Tersedia(int stok_Tersedia) {
         this.stok_Tersedia = stok_Tersedia;
-        updateKekurangan(); // Recalculate kekurangan
+        updateKekurangan(); 
     }
 
-    public int getStok_Kebutuhan() {
-        return stok_Kebutuhan;
+    public int getStok_Dibutuhkan() {
+        return stok_Dibutuhkan;
     }
 
-    public void setStok_Kebutuhan(int stok_Kebutuhan) {
-        this.stok_Kebutuhan = stok_Kebutuhan;
-        updateKekurangan(); // Recalculate kekurangan
+    public void setStok_Dibutuhkan(int stok_Dibutuhkan) {
+        this.stok_Dibutuhkan = stok_Dibutuhkan;
+        updateKekurangan(); 
     }
 
     public String getKekurangan() {
         if (kekurangan > 0) {
             return String.valueOf(kekurangan);  // Menampilkan nilai kekurangan
         } else {
-            return "Tidak ada kekurangan"; // Menampilkan pesan jika tidak ada kekurangan
+            return "Tidak ada kekurangan"; 
         }
     }
 
     // Method untuk menghitung kekurangan
     private void updateKekurangan() {
-        this.kekurangan = stok_Kebutuhan - stok_Tersedia; // Otomatis menghitung kekurangan
+        this.kekurangan = stok_Dibutuhkan - stok_Tersedia; 
     }
 }

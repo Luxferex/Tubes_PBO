@@ -38,8 +38,8 @@ public class MajalahService {
         if (majalahOptional.isPresent()) {
             Majalah majalah = majalahOptional.get();
             majalah.setJudul(majalahDetails.getJudul());
-            majalah.setStokTersedia(majalahDetails.getStokTersedia());
-            majalah.setStokKebutuhan(majalahDetails.getStokKebutuhan());
+            majalah.setstok_Tersedia(majalahDetails.getstok_Tersedia());
+            majalah.setstok_Dibutuhkan(majalahDetails.getstok_Dibutuhkan());
             return majalahRepository.save(majalah);
         } else {
             throw new RuntimeException("Majalah dengan ID " + id + " tidak ditemukan.");

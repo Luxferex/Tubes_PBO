@@ -39,7 +39,7 @@ public class JurnalService {
             Jurnal jurnal = jurnalOptional.get();
             jurnal.setJudul(jurnalDetails.getJudul());
             jurnal.setStok_Tersedia(jurnalDetails.getStok_Tersedia());
-            jurnal.setStok_Kebutuhan(jurnalDetails.getStok_Kebutuhan());
+            jurnal.setStok_Dibutuhkan(jurnalDetails.getStok_Dibutuhkan());
             return jurnalRepository.save(jurnal);
         } else {
             throw new RuntimeException("jurnal dengan ID " + id + " tidak ditemukan.");

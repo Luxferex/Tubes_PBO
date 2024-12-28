@@ -2,7 +2,6 @@ package com.example.backend_pbo.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "majalah")
 public class Majalah {
@@ -10,20 +9,20 @@ public class Majalah {
     @Id
     private String id;
     private String judul;
-    @Field("stok_Tersedia")
-    private int stokTersedia;
-    @Field("stok_Kebutuhan")
-    private int stokKebutuhan;
+ 
+    private int stok_Tersedia;
+    
+    private int stok_Dibutuhkan;
     private int kekurangan; 
 
     // Constructors
     public Majalah() {}
 
-    public Majalah(String judul, int stokTersedia, int stokKebutuhan) {
+    public Majalah(String judul, int stok_Tersedia, int stok_Dibutuhkan) {
         this.judul = judul;
-        this.stokTersedia = stokTersedia;
-        this.stokKebutuhan = stokKebutuhan;
-        this.kekurangan = stokKebutuhan - stokTersedia; // Menghitung kekurangan saat object dibuat
+        this.stok_Tersedia = stok_Tersedia;
+        this.stok_Dibutuhkan = stok_Dibutuhkan;
+        this.kekurangan = stok_Dibutuhkan - stok_Tersedia; // Menghitung kekurangan saat object dibuat
     }
 
     // Getters and Setters
@@ -43,22 +42,22 @@ public class Majalah {
         this.judul = judul;
     }
 
-    public int getStokTersedia() {
-        return stokTersedia;
+    public int getstok_Tersedia() {
+        return stok_Tersedia;
     }
 
-    public void setStokTersedia(int stokTersedia) {
-        this.stokTersedia = stokTersedia;
-        updateKekurangan(); // Recalculate kekurangan jika stokTersedia berubah
+    public void setstok_Tersedia(int stok_Tersedia) {
+        this.stok_Tersedia = stok_Tersedia;
+        updateKekurangan(); // Recalculate kekurangan jika stok_Tersedia berubah
     }
 
-    public int getStokKebutuhan() {
-        return stokKebutuhan;
+    public int getstok_Dibutuhkan() {
+        return stok_Dibutuhkan;
     }
 
-    public void setStokKebutuhan(int stokKebutuhan) {
-        this.stokKebutuhan = stokKebutuhan;
-        updateKekurangan(); // Recalculate kekurangan jika stokKebutuhan berubah
+    public void setstok_Dibutuhkan(int stok_Dibutuhkan) {
+        this.stok_Dibutuhkan = stok_Dibutuhkan;
+        updateKekurangan(); // Recalculate kekurangan jika stok_Dibutuhkan berubah
     }
 
     public String getKekurangan() {
@@ -71,6 +70,6 @@ public class Majalah {
 
     // Method untuk menghitung kekurangan
     private void updateKekurangan() {
-        this.kekurangan = stokKebutuhan - stokTersedia; // Otomatis menghitung kekurangan
+        this.kekurangan = stok_Dibutuhkan - stok_Tersedia; // Otomatis menghitung kekurangan
     }
 }
