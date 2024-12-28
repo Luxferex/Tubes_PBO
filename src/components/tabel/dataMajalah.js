@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import Modal from '../home/modal'; // Asumsi Anda memiliki komponen Modal yang sama seperti DataBuku
+import { fetchData, createData, updateData, deleteData } from '../CRUD'; // Import reusable CRUD functions
+import PopUpCRUD from '../home/popUpCRUD'; // Menggunakan nama baru untuk modal
 
 const DataMajalah = () => {
-  const [majalah, setMajalah] = useState([]); // State untuk menyimpan data majalah
+  const [majalah, setMajalah] = useState([]); // State untuk data majalah
   const [loading, setLoading] = useState(true); // State untuk loading
-  const [error, setError] = useState(null); // State untuk error handling
-  const [isModalOpen, setIsModalOpen] = useState(false); // State untuk modal
-  const [selectedMajalah, setSelectedMajalah] = useState(null); // State untuk majalah yang dipilih
+  const [error, setError] = useState(null); // Error handling
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility
+  const [selectedMajalah, setSelectedMajalah] = useState(null); // Selected majalah for update
 
-  // Fetch data majalah dari server
-  const fetchMajalah = async () => {
+  // Fetch data majalah
+  const loadMajalah = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:8080/majalah');
-      if (!response.ok) throw new Error('Gagal mengambil data majalah');
-      const data = await response.json();
+      const data = await fetchData('majalah'); // Using the reusable fetchData function
       setMajalah(data);
     } catch (err) {
       setError(err.message);
@@ -23,62 +22,57 @@ const DataMajalah = () => {
     }
   };
 
+  // Handle modal submission for adding or updating majalah
+  const handleModalSubmit = async (formData) => {
+    try {
+      if (formData.id) {
+        // Update existing majalah
+        await updateData('majalah', formData.id, formData);
+        alert('Data majalah berhasil diperbarui!');
+      } else {
+        // Add new majalah
+        await createData('majalah', formData);
+        alert('Data majalah berhasil ditambahkan!');
+      }
+
+      loadMajalah(); // Refresh data after operation
+    } catch (err) {
+      console.error('Gagal menyimpan data:', err);
+      alert('Terjadi kesalahan saat menyimpan data.');
+    } finally {
+      setIsModalOpen(false); // Close modal
+      setSelectedMajalah(null); // Reset selected majalah
+    }
+  };
+
   // Handle delete majalah
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus majalah ini?')) {
       try {
-        const response = await fetch(`http://localhost:8080/majalah/${id}`, {
-          method: 'DELETE',
-        });
-        if (!response.ok) throw new Error('Gagal menghapus majalah');
-        fetchMajalah(); // Refresh data
+        await deleteData('majalah', id); // Use deleteData for majalah
+        alert('Data majalah berhasil dihapus!');
+        loadMajalah(); // Refresh data after deletion
       } catch (err) {
         console.error('Gagal menghapus majalah:', err);
+        alert('Terjadi kesalahan saat menghapus data.');
       }
     }
   };
 
-  // Handle buka modal untuk edit
-  const handleEdit = (majalahItem) => {
-    setSelectedMajalah(majalahItem); // Set data majalah yang dipilih
-    setIsModalOpen(true); // Buka modal
+  // Handle edit majalah
+  const handleEdit = (majalah) => {
+    setSelectedMajalah(majalah); // Set selected majalah for editing
+    setIsModalOpen(true); // Open modal
   };
 
-  // Handle submit form modal
-  const handleModalSubmit = async (formData) => {
-    try {
-      const url = formData.id
-        ? `http://localhost:8080/majalah/${formData.id}` // Untuk update
-        : 'http://localhost:8080/majalah'; // Untuk tambah baru
-
-      const method = formData.id ? 'PUT' : 'POST'; // PUT jika update, POST jika tambah baru
-
-      // Pastikan stok_Tersedia dan stok_Kebutuhan adalah angka
-      const dataToSend = {
-        ...formData,
-        stokTersedia: parseInt(formData.stokTersedia, 10),
-        stokKebutuhan: parseInt(formData.stokKebutuhan, 10),
-      };
-
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dataToSend),
-      });
-
-      if (!response.ok) throw new Error('Gagal menyimpan data majalah');
-
-      fetchMajalah(); // Refresh data setelah sukses
-    } catch (err) {
-      console.error('Gagal menyimpan data:', err);
-    } finally {
-      setIsModalOpen(false); // Tutup modal
-      setSelectedMajalah(null); // Reset data majalah
-    }
+  // Handle adding new majalah
+  const handleAdd = () => {
+    setSelectedMajalah(null); // Reset selected majalah for add new
+    setIsModalOpen(true); // Open modal
   };
 
   useEffect(() => {
-    fetchMajalah();
+    loadMajalah(); // Load majalah data on initial render
   }, []);
 
   if (loading) return <p className="text-center">Loading...</p>;
@@ -86,6 +80,10 @@ const DataMajalah = () => {
 
   return (
     <div>
+      <button onClick={handleAdd} className="mb-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+        Tambah Majalah
+      </button>
+
       <table className="table-auto w-full border-collapse border border-gray-300">
         <thead>
           <tr>
@@ -99,13 +97,13 @@ const DataMajalah = () => {
         </thead>
         <tbody>
           {majalah.map((majalahItem, index) => {
-            const kekurangan = majalahItem.stokKebutuhan - majalahItem.stokTersedia;
+            const kekurangan = majalahItem.stok_Dibutuhkan - majalahItem.stok_Tersedia;
             return (
               <tr key={majalahItem.id}>
                 <td className="border border-gray-300 px-1 py-2 text-center">{index + 1}</td>
                 <td className="border border-gray-300 px-4 py-2">{majalahItem.judul}</td>
-                <td className="border border-gray-300 px-4 py-2 text-center">{majalahItem.stokTersedia}</td>
-                <td className="border border-gray-300 px-4 py-2 text-center">{majalahItem.stokKebutuhan}</td>
+                <td className="border border-gray-300 px-4 py-2 text-center">{majalahItem.stok_Tersedia}</td>
+                <td className="border border-gray-300 px-4 py-2 text-center">{majalahItem.stok_Dibutuhkan}</td>
                 <td className="border border-gray-300 px-4 py-2 text-center">{kekurangan > 0 ? kekurangan : 'Tidak ada kekurangan'}</td>
                 <td className="border border-gray-300 px-4 py-2 text-center">
                   <button onClick={() => handleEdit(majalahItem)} className="mr-2 text-blue-500 hover:text-blue-700" title="Edit">
@@ -120,8 +118,9 @@ const DataMajalah = () => {
           })}
         </tbody>
       </table>
-      {/* Modal */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleModalSubmit} initialData={selectedMajalah} />
+
+      {/*Pop UP */}
+      <PopUpCRUD isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleModalSubmit} initialData={selectedMajalah} type="majalah" />
     </div>
   );
 };

@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import Modal from '../home/modal';
+import { fetchData, createData, updateData, deleteData } from '../CRUD'; // Import reusable CRUD functions
+import PopUpCRUD from '../home/popUpCRUD'; // Menggunakan nama baru untuk modal
 
 const DataBuku = () => {
-  const [books, setBooks] = useState([]); // State untuk menyimpan data buku
-  const [loading, setLoading] = useState(true); // Loading state
+  const [books, setBooks] = useState([]); // State to store book data
+  const [loading, setLoading] = useState(true); // State for loading
   const [error, setError] = useState(null); // Error handling
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility
-  const [selectedBook, setSelectedBook] = useState(null); // Buku yang dipilih untuk update
+  const [selectedBook, setSelectedBook] = useState(null); // Selected book for update
 
-  // Fetch data buku
-  const fetchBooks = async () => {
+  // Fetch book data
+  const loadBooks = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:8080/buku');
-      if (!response.ok) throw new Error('Gagal mengambil data buku');
-      const data = await response.json();
+      const data = await fetchData('buku'); // Fetch books data using fetchData utility
       setBooks(data);
     } catch (err) {
       setError(err.message);
@@ -23,63 +22,57 @@ const DataBuku = () => {
     }
   };
 
-  // Handle delete buku
+  // Handle modal submission for adding or updating book
+  const handleModalSubmit = async (formData) => {
+    try {
+      if (formData.id) {
+        // Update existing book
+        await updateData('buku', formData.id, formData);
+        alert('Data buku berhasil diperbarui!');
+      } else {
+        // Add new book
+        await createData('buku', formData);
+        alert('Data buku berhasil ditambahkan!');
+      }
+
+      loadBooks(); // Refresh data after operation
+    } catch (err) {
+      console.error('Gagal menyimpan data:', err);
+      alert('Terjadi kesalahan saat menyimpan data.');
+    } finally {
+      setIsModalOpen(false); // Close modal
+      setSelectedBook(null); // Reset selected book
+    }
+  };
+
+  // Handle delete book
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus buku ini?')) {
       try {
-        const response = await fetch(`http://localhost:8080/buku/${id}`, {
-          method: 'DELETE',
-        });
-        if (!response.ok) throw new Error('Gagal menghapus buku');
-        fetchBooks(); // Refresh data setelah berhasil
+        await deleteData('buku', id); // Use deleteData for books
+        alert('Data buku berhasil dihapus!');
+        loadBooks(); // Refresh data after deletion
       } catch (err) {
         console.error('Gagal menghapus buku:', err);
+        alert('Terjadi kesalahan saat menghapus data.');
       }
     }
   };
 
-  // Handle buka modal untuk edit
+  // Handle edit book
   const handleEdit = (book) => {
-    setSelectedBook(book); // Set data buku yang dipilih
-    setIsModalOpen(true); // Buka modal
+    setSelectedBook(book); // Set selected book for editing
+    setIsModalOpen(true); // Open modal
   };
 
-  const handleModalSubmit = async (formData) => {
-    try {
-      console.log('Form data yang dikirimkan:', formData); // Log formData yang dikirimkan
-      const url = formData.id
-        ? `http://localhost:8080/buku/${formData.id}` // Untuk update
-        : 'http://localhost:8080/buku'; // Untuk tambah baru
-
-      // Pastikan stok_Tersedia dan stok_Dibutuhkan adalah angka
-      const dataToSend = {
-        ...formData,
-        stok_Tersedia: parseInt(formData.stok_Tersedia, 10), // Konversi menjadi angka
-        stok_Dibutuhkan: parseInt(formData.stok_Dibutuhkan, 10), // Konversi menjadi angka
-      };
-
-      const method = formData.id ? 'PUT' : 'POST'; // PUT jika update, POST jika tambah baru
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dataToSend),
-      });
-
-      if (!response.ok) throw new Error('Gagal menyimpan data buku');
-
-      console.log('Response dari server:', await response.json()); // Log response dari server
-
-      fetchBooks(); // Refresh data setelah sukses
-    } catch (err) {
-      console.error('Gagal menyimpan data:', err);
-    } finally {
-      setIsModalOpen(false); // Tutup modal
-      setSelectedBook(null); // Reset buku yang dipilih
-    }
+  // Handle adding new book
+  const handleAdd = () => {
+    setSelectedBook(null); // Reset selected book for add new
+    setIsModalOpen(true); // Open modal
   };
 
   useEffect(() => {
-    fetchBooks();
+    loadBooks(); // Load books data on initial render
   }, []);
 
   if (loading) return <p className="text-center">Loading...</p>;
@@ -87,6 +80,10 @@ const DataBuku = () => {
 
   return (
     <div>
+      <button onClick={handleAdd} className="mb-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+        Tambah Buku
+      </button>
+
       <table className="table-auto w-full border-collapse border border-gray-300">
         <thead>
           <tr>
@@ -118,8 +115,9 @@ const DataBuku = () => {
           ))}
         </tbody>
       </table>
-      {/* Modal */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleModalSubmit} initialData={selectedBook} />
+
+      {/*Pop UP */}
+      <PopUpCRUD isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleModalSubmit} initialData={selectedBook} type="buku" />
     </div>
   );
 };

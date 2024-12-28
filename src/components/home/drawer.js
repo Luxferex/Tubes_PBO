@@ -54,12 +54,6 @@ const Drawer = () => {
           Data Anggota
         </button>
 
-        {/* Transaksi */}
-        <button className="w-full text-left text-gray-200 hover:bg-gray-700 p-2 rounded flex items-center justify-start" onClick={() => handleMenuClick('transaksi')}>
-          <FaFolder className="mr-2" />
-          Transaksi
-        </button>
-
         {/* Laporan */}
         <button className="w-full text-left text-gray-200 hover:bg-gray-700 p-2 rounded flex items-center justify-start" onClick={() => handleMenuClick('laporan')}>
           <FaFileAlt className="mr-2" />

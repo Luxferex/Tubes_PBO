@@ -1,35 +1,42 @@
 import React, { useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import Modal from './modal';
+import PopUpCRUD from '../home/popUpCRUD'; // Mengganti nama modal
+import { createData, updateData, fetchData } from '../CRUD';
 
-const ActionBar = ({ onSearch, onNewReport, onExport, searchPlaceholder = 'Search...', dataType }) => {
+const ActionBar = ({ onSearch, searchPlaceholder = 'Search...', type, onDataUpdate, isAnggota }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedData, setSelectedData] = useState(null); // Untuk edit data
 
+  // Untuk tambah data baru
   const handleNewReport = () => {
+    setSelectedData(null); // Kosongkan data untuk mode tambah baru
     setIsModalOpen(true);
   };
 
+  // Tutup modal
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
 
+  // Submit data ke server
   const handleSubmit = async (formData) => {
     try {
-      const endpoint = `http://localhost:8080/${dataType}`; // Use dataType for dynamic endpoint
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        alert(`${dataType.charAt(0).toUpperCase() + dataType.slice(1)} data berhasil ditambahkan!`);
+      if (selectedData) {
+        // Jika edit data
+        await updateData(type, selectedData.id, formData);
+        alert(`${type} berhasil diperbarui!`);
       } else {
-        alert('Gagal menambahkan data');
+        // Jika tambah data baru
+        await createData(type, formData);
+        alert(`${type} berhasil ditambahkan!`);
       }
+
+      // Fetch data terbaru untuk memperbarui tampilan
+      const updatedData = await fetchData(type);
+      if (onDataUpdate) onDataUpdate(updatedData); // Panggil callback untuk meng-update data di parent
     } catch (error) {
       console.error('Error:', error);
-      alert('Terjadi kesalahan saat menambahkan data.');
+      alert('Terjadi kesalahan saat menyimpan data.');
     } finally {
       setIsModalOpen(false);
     }
@@ -39,12 +46,13 @@ const ActionBar = ({ onSearch, onNewReport, onExport, searchPlaceholder = 'Searc
     <>
       <div className="flex justify-between items-center py-4 px-6 bg-gray-100 rounded-lg shadow-md mb-4">
         <div className="flex space-x-4">
-          <button className="flex items-center bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition duration-200" onClick={handleNewReport}>
-            <span className="mr-2">New {dataType.charAt(0).toUpperCase() + dataType.slice(1)} Report</span>
-          </button>
-          <button className="flex items-center bg-gray-200 text-black px-6 py-2 rounded-full hover:bg-gray-300 transition duration-200" onClick={onExport}>
-            <span className="mr-2">Export</span>
-          </button>
+          {isAnggota && (
+            <button className="flex items-center bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition duration-200" onClick={handleNewReport}>
+              <span className="mr-2">
+                New {type === 'anggota' ? 'Anggota' : 'Tambah Data'} {type.charAt(0).toUpperCase() + type.slice(1)}
+              </span>
+            </button>
+          )}
         </div>
 
         <div className="flex items-center border border-gray-300 rounded-full w-1/4">
@@ -52,7 +60,8 @@ const ActionBar = ({ onSearch, onNewReport, onExport, searchPlaceholder = 'Searc
           <input type="text" placeholder={searchPlaceholder} className="px-4 py-2 w-full rounded-full outline-none focus:ring-0" onChange={(e) => onSearch(e.target.value)} />
         </div>
       </div>
-      <Modal isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleSubmit} />
+
+      <PopUpCRUD isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleSubmit} type={type} initialData={selectedData} />
     </>
   );
 };
