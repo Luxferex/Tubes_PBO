@@ -2,6 +2,7 @@
 <%@page import="models.Buku"%>
 <%@page import="models.Jurnal"%>
 <%@page import="models.Majalah"%>
+<%@page import="models.User"%>
 <%@page import="java.util.List"%>
 
 <!DOCTYPE html>
@@ -37,13 +38,25 @@
 
     <div class="flex mt-[80px]">
         <div class="bg-gray-800 text-white p-4 fixed h-full w-64 overflow-y-auto pt-40">
-            <div class="flex items-center space-x-4 mb">
-                <div>
-                    <img src="images/default.png" alt="Administrator" class="w-10 h-10 rounded-full">
-                    <div class="font-semibold">test</div>
-                    <div class="text-sm text-gray-400">Administrator</div>
-                </div>
-            </div>
+            <div class="flex items-center space-x-4 mb">  
+                <div>  
+                    <img src="images/default.png" alt="Administrator" class="w-10 h-10 rounded-full">  
+                    <%  
+                        User user = (User) request.getSession().getAttribute("user"); // Ambil user dari session  
+                        if (user != null) {  
+                    %>  
+                        <div class="font-semibold"><%= user.getName() %></div>  
+                        <div class="text-sm text-gray-400"><%= user.getRole() %></div>  
+                    <%  
+                        } else {  
+                    %>  
+                        <div class="font-semibold">Guest</div>  
+                        <div class="text-sm text-gray-400">No Role</div>  
+                    <%  
+                        }  
+                    %>  
+                </div>  
+            </div>  
             <div class="space-y-4 pt-8">
                 <div>
                     <button class="w-full text-left text-gray-200 hover:bg-gray-700 p-2 rounded" onclick="toggleDropdown()">

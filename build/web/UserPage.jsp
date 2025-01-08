@@ -39,7 +39,23 @@
     
     <div class="flex mt-[80px]">    
         <div class="bg-gray-800 text-white p-4 fixed h-full w-64 overflow-y-auto pt-40">    
-            <div class="flex items-center space-x-4 mb">    
+            <div>  
+                <img src="images/default.png" alt="Administrator" class="w-10 h-10 rounded-full">  
+                <%  
+                    User user = (User) request.getSession().getAttribute("user"); // Ambil user dari session  
+                    if (user != null) {  
+                %>  
+                    <div class="font-semibold"><%= user.getName() %></div>  
+                    <div class="text-sm text-gray-400"><%= user.getRole() %></div>  
+                <%  
+                    } else {  
+                %>  
+                    <div class="font-semibold">Guest</div>  
+                    <div class="text-sm text-gray-400">No Role</div>  
+                <%  
+                    }  
+                %>  
+            </div>     
                    
             <div class="space-y-4 pt-8">    
                 <div>    

@@ -60,6 +60,8 @@ public class UserController extends HttpServlet {
                         if (user.getPassword().equals(password)) {
                             request.getSession().setAttribute("currNim", user.getNim());
                             request.getSession().setAttribute("currName", user.getName());
+                            request.getSession().setAttribute("user", user); // Simpan objek user di session  
+
                             response.sendRedirect("AdminPage.jsp"); // Redirect to dashboard  
                         } else {
                             request.setAttribute("error", "NIM or password incorrect");
@@ -69,6 +71,8 @@ public class UserController extends HttpServlet {
                         if (user.getPassword().equals(password)) {
                             request.getSession().setAttribute("currNim", user.getNim());
                             request.getSession().setAttribute("currName", user.getName());
+                            request.getSession().setAttribute("user", user); // Simpan objek user di session  
+
                             response.sendRedirect("UserPage.jsp"); // Redirect to dashboard  
                         } else {
                             request.setAttribute("error", "NIM or password incorrect");
