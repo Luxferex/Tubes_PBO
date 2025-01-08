@@ -18,7 +18,7 @@
             
             <div class="mb-4">  
                 <label class="block text-sm font-medium text-gray-700">ID Majalah:</label>  
-                <input type="text" name="idMajalah" value="${jurnal.idJurnal}" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500">  
+                <input type="text" name="idJurnal" value="${jurnal.idJurnal}" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500">  
             </div>
               
             <div class="mb-4">  
