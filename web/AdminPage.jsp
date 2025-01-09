@@ -47,7 +47,7 @@
                         %>  
                         <div class="font-bold mx-20"><%= user.getName()%></div>  
                         <div class="text-sm text-gray-400 mx-20"><%= user.getRole()%></div>  
-                        <div class="font-semibold">ID : <%= user.getNim()%></div>  
+                        <div class="font-semibold mx-2">ID : <%= user.getNim()%></div>  
 
                         <%
                         } else {

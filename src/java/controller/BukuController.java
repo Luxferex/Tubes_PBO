@@ -28,6 +28,11 @@ public class BukuController extends HttpServlet {
             Buku buku = new Buku().getById(id); // Ambil buku berdasarkan ID
             request.setAttribute("buku", buku);
             request.getRequestDispatcher("EditBuku.jsp").forward(request, response);
+        } else if ("card".equals(menu)) {
+            ArrayList<Buku> daftarBuku = new Buku().get(); // Ambil data buku dari database
+            request.setAttribute("daftarBuku", daftarBuku);
+            request.getRequestDispatcher("CardBuku.jsp").forward(request, response);
+
         } else {
             response.sendRedirect("Buku?menu=list"); // Default ke daftar
         }
@@ -35,7 +40,7 @@ public class BukuController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         String action = request.getParameter("action");
 
         if ("add".equals(action)) {
@@ -48,7 +53,7 @@ public class BukuController extends HttpServlet {
     }
 
     private void addBuku(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         try {
             Buku buku = new Buku();
             buku.setIsbn(request.getParameter("isbn"));
@@ -69,32 +74,31 @@ public class BukuController extends HttpServlet {
         }
     }
 
-    private void editBuku(HttpServletRequest request, HttpServletResponse response)  
-        throws ServletException, IOException {  
-        try {  
-            Buku buku = new Buku();  
+    private void editBuku(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            Buku buku = new Buku();
             buku.setId(Integer.parseInt(request.getParameter("id"))); // Ambil ID dari parameter  
-            buku.setIsbn(request.getParameter("isbn"));  
-            buku.setJudul(request.getParameter("judul"));  
-            buku.setPenulis(request.getParameter("penulis"));  
-            buku.setPenerbit(request.getParameter("penerbit"));  
-            buku.setTahunTerbit(Integer.parseInt(request.getParameter("tahun_terbit")));  
-            buku.setJumlah(Integer.parseInt(request.getParameter("jumlah")));  
-            buku.setStokDibutuhkan(Integer.parseInt(request.getParameter("stok_dibutuhkan")));  
-            buku.setStokTersedia(Integer.parseInt(request.getParameter("stok_tersedia")));  
+            buku.setIsbn(request.getParameter("isbn"));
+            buku.setJudul(request.getParameter("judul"));
+            buku.setPenulis(request.getParameter("penulis"));
+            buku.setPenerbit(request.getParameter("penerbit"));
+            buku.setTahunTerbit(Integer.parseInt(request.getParameter("tahun_terbit")));
+            buku.setJumlah(Integer.parseInt(request.getParameter("jumlah")));
+            buku.setStokDibutuhkan(Integer.parseInt(request.getParameter("stok_dibutuhkan")));
+            buku.setStokTersedia(Integer.parseInt(request.getParameter("stok_tersedia")));
             buku.update(); // Update buku di database  
 
-            response.sendRedirect("AdminPage.jsp?menu=buku");  
-        } catch (Exception e) {  
-            e.printStackTrace();  
-            request.setAttribute("errorMessage", "Error editing book: " + e.getMessage());  
-            request.getRequestDispatcher("EditBuku.jsp?id=" + request.getParameter("id")).forward(request, response);  
-        }  
-    }  
-
+            response.sendRedirect("AdminPage.jsp?menu=buku");
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Error editing book: " + e.getMessage());
+            request.getRequestDispatcher("EditBuku.jsp?id=" + request.getParameter("id")).forward(request, response);
+        }
+    }
 
     private void deleteBuku(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         try {
             Buku buku = new Buku();
