@@ -8,34 +8,63 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Daftar Majalah</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-    <div class="grid grid-cols-4 gap-4 p-4">
-        <%
-            for (Majalah majalah : daftarMajalah) {
-        %>
-            <div class="bg-gray-200 p-4 rounded-lg shadow-md flex flex-col items-center">
-                <div class="text-6xl mb-2">
-                    <i class="fas fa-newspaper"></i>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Daftar Majalah</title>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+    <body class="bg-gray-100">
+        <div class="container mx-auto py-6">
+            <h1 class="text-2xl font-bold text-center mb-8">Daftar Majalah</h1>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <%
+                    if (daftarMajalah != null && !daftarMajalah.isEmpty()) {
+                        for (Majalah majalah : daftarMajalah) {
+                %>
+                <!-- Card Item -->
+                <div class="bg-white p-4 rounded-lg shadow-lg flex flex-col transform transition hover:scale-105 hover:shadow-xl">
+                    <!-- Icon -->
+                    <div class="text-6xl text-gray-500 mb-4 flex justify-center">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <!-- Majalah Info -->
+                    <div class="mb-4">
+                        <h3 class="text-lg font-semibold text-center text-gray-700 mb-2">
+                            <%= majalah.getJudul()%>
+                        </h3>
+                        <p class="text-sm text-gray-600">
+                            <strong>Penerbit:</strong> <%= majalah.getPenerbit()%>
+                        </p>
+                        <p class="text-sm text-gray-600">
+                            <strong>Tahun Terbit:</strong> <%= majalah.getTahunTerbit()%>
+                        </p>
+                        <p class="text-sm text-gray-600">
+                            <strong>ID:</strong> <%= majalah.getIdMajalah()%>
+                        </p>
+                        <p class="text-sm text-gray-600">
+                            <strong>Stok:</strong> <%= majalah.getStokTersedia()%> tersedia dari <%= majalah.getStokDibutuhkan()%>
+                        </p>
+                    </div>
+                    <!-- Action Buttons -->
+                    <div class="mt-auto flex justify-center space-x-2">
+
+                        <button class="bg-green-500 text-white py-2 px-4 rounded-lg flex items-center"   
+                                onclick="window.location.href = 'KeranjangController?tipe=majalah&id=<%= majalah.getId() %>&action=add'">  
+                            <i class="fas fa-book-reader mr-2"></i> Pinjam  
+                        </button>  
+                    </div>
                 </div>
-                <h3 class="text-lg font-semibold">"<%= majalah.getJudul() %>"</h3>
-                <div class="flex space-x-2 mt-2">
-                    <button class="bg-blue-500 text-white p-2 rounded">
-                        <i class="fas fa-info-circle"></i>
-                    </button>
-                    <button class="bg-green-500 text-white p-2 rounded">
-                        <i class="fas fa-download"></i>
-                    </button>
-                </div>
+                <%
+                    }
+                } else {
+                %>
+                <p class="col-span-full text-center text-red-500">Tidak ada majalah yang tersedia.</p>
+                <%
+                    }
+                %>
             </div>
-        <%
-            }
-        %>
-    </div>
-</body>
+        </div>
+    </body>
 </html>

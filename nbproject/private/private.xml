@@ -4,9 +4,24 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/src/java/models/User.java</file>
-            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/src/java/controller/UserController.java</file>
-            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/src/java/models/Model.java</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/src/java/models/Majalah.java</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/src/java/controller/JurnalController.java</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/web/EditAnggota.jsp</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/web/UserList.jsp</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/src/java/controller/LaporanController.java</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/src/java/models/Buku.java</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/src/java/controller/BorrowController.java</file>
             <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/web/AdminPage.jsp</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/src/java/controller/KeranjangController.java</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/web/LaporanPinjam.jsp</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/web/AddAnggota.jsp</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/web/BukuList.jsp</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/src/java/controller/UserController.java</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/web/Profile.jsp</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/src/java/controller/BukuController.java</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/src/java/models/Model.java</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/web/register.jsp</file>
+            <file>file:/C:/Users/Jorji/OneDrive%20-%20Telkom%20University/Documents/NetBeansProjects/PBO_Tubes/web/UserPage.jsp</file>
         </group>
     </open-files>
 </project-private>

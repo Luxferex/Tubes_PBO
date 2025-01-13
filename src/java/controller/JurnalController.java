@@ -1,4 +1,4 @@
-    package controllers;
+package controllers;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -11,12 +11,12 @@ import java.util.ArrayList;
 
 @WebServlet(name = "JurnalController", urlPatterns = {"/Jurnal"})
 public class JurnalController extends HttpServlet {
-
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String menu = request.getParameter("menu");
-
+        
         if ("list".equals(menu)) {
             ArrayList<Jurnal> jurnalList = new Jurnal().get(); // Ambil data jurnal dari database
             request.setAttribute("jurnalList", jurnalList);
@@ -28,16 +28,20 @@ public class JurnalController extends HttpServlet {
             Jurnal jurnal = new Jurnal().getById(id); // Ambil jurnal berdasarkan ID
             request.setAttribute("jurnal", jurnal);
             request.getRequestDispatcher("EditJurnal.jsp").forward(request, response);
+        } else if ("card".equals(menu)) {
+            ArrayList<Jurnal> daftarJurnal = new Jurnal().get(); // Ambil data buku dari database
+            request.setAttribute("daftarJurnal", daftarJurnal);
+            request.getRequestDispatcher("CardJurnal.jsp").forward(request, response);
         } else {
             response.sendRedirect("Jurnal?menu=list"); // Default ke daftar
         }
     }
-
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         String action = request.getParameter("action");
-
+        
         if ("add".equals(action)) {
             try {
                 Jurnal jurnal = new Jurnal();

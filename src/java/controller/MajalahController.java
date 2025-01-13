@@ -1,3 +1,4 @@
+
 package controllers;
 
 import java.io.IOException;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import models.Majalah;
 import java.util.ArrayList;
+
 
 @WebServlet(name = "MajalahController", urlPatterns = {"/Majalah"})
 public class MajalahController extends HttpServlet {
@@ -28,7 +30,11 @@ public class MajalahController extends HttpServlet {
             Majalah majalah = new Majalah().getById(id); // Ambil majalah berdasarkan ID
             request.setAttribute("majalah", majalah);
             request.getRequestDispatcher("EditMajalah.jsp").forward(request, response);
-        } else {
+        } else if("card".equals(menu)){
+            ArrayList<Majalah> daftarMajalah = new Majalah().get(); // Ambil data buku dari database
+            request.setAttribute("daftarMajalah", daftarMajalah);
+            request.getRequestDispatcher("CardMajalah.jsp").forward(request, response);
+        }else {
             response.sendRedirect("Majalah?menu=list"); // Default ke daftar
         }
     }

@@ -25,19 +25,19 @@ public class UserController extends HttpServlet {
         } else if ("signup".equals(menu)) {
             request.getRequestDispatcher("register.jsp").forward(request, response);
         } else if ("list".equals(menu)) {
-            ArrayList<User> userList = new User().get(); // Retrieve the list of users from database
+            ArrayList<User> userList = new User().get(); // Retrieve the list of users from database  
             request.setAttribute("userList", userList);
             request.getRequestDispatcher("UserList.jsp").forward(request, response);
         } else if ("edit".equals(menu)) {
             String nimParam = request.getParameter("nim");
 
             if (nimParam != null && !nimParam.isEmpty()) {
-                int nim = Integer.parseInt(nimParam); // Safely parse the integer after checking
-                User user = new User().getById(nim); // Retrieve user by ID
+                int nim = Integer.parseInt(nimParam); // Safely parse the integer after checking  
+                User user = new User().getById(nim); // Retrieve user by ID  
                 request.setAttribute("user", user);
                 request.getRequestDispatcher("EditAnggota.jsp").forward(request, response);
             } else {
-                // Handle error if ID is missing or invalid
+                // Handle error if ID is missing or invalid  
                 request.getSession().setAttribute("error", "Invalid user ID");
                 response.sendRedirect("User?menu=list");
             }
@@ -55,31 +55,36 @@ public class UserController extends HttpServlet {
             User user = new User();
             user.setName(request.getParameter("name"));
             user.setEmail(request.getParameter("email"));
-            user.setNim(Integer.parseInt(request.getParameter("nim"))); // Set NIM  
-            user.setJurusan(request.getParameter("jurusan")); // Set Jurusan  
-            user.setFakultas(request.getParameter("fakultas")); // Set Fakultas  
-            user.setPhone(request.getParameter("phone")); // Set Phone as String  
-            user.setRole("user"); // Default role  
-            user.setPassword(request.getParameter("password")); // Set Password  
+            user.setNim(Integer.parseInt(request.getParameter("nim")));
+            user.setJurusan(request.getParameter("jurusan"));
+            user.setFakultas(request.getParameter("fakultas"));
+            user.setPhone(request.getParameter("phone"));
+            user.setRole("user"); // Set role secara otomatis menjadi "user"  
+            user.setPassword(request.getParameter("password")); // Simpan password  
 
-            user.insert(); // Save the new user to the database  
-            request.getSession().setAttribute("msg", "User berhasil ditambahkan");
-            response.sendRedirect("AdminPage.jsp?menu=user");
+            // Simpan pengguna baru ke database      
+            if (user.save()) {
+                request.getSession().setAttribute("msg", "User berhasil ditambahkan");
+                response.sendRedirect("login.jsp"); // Redirect ke halaman login setelah registrasi berhasil  
+            } else {
+                request.getSession().setAttribute("error", "Gagal menambahkan user");
+                response.sendRedirect("register.jsp"); // Redirect kembali ke halaman registrasi  
+            }
         } else if ("login".equals(action)) {
-            String nim = request.getParameter("nim"); // Get NIM  
+            String nim = request.getParameter("nim"); // Get NIM    
             String password = request.getParameter("password");
 
             if (nim != null && password != null) {
                 User user = new User();
-                user = user.find(nim);// Fetch user by NIM  
+                user = user.find(nim);// Fetch user by NIM    
                 if (user != null) {
                     if (user.getRole().equals("admin")) {
                         if (user.getPassword().equals(password)) {
                             request.getSession().setAttribute("currNim", user.getNim());
                             request.getSession().setAttribute("currName", user.getName());
-                            request.getSession().setAttribute("user", user); // Store user object in session  
+                            request.getSession().setAttribute("user", user); // Store user object in session    
 
-                            response.sendRedirect("AdminPage.jsp"); // Redirect to admin dashboard  
+                            response.sendRedirect("AdminPage.jsp"); // Redirect to admin dashboard    
                         } else {
                             request.setAttribute("error", "NIM or password incorrect");
                             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -88,9 +93,9 @@ public class UserController extends HttpServlet {
                         if (user.getPassword().equals(password)) {
                             request.getSession().setAttribute("currNim", user.getNim());
                             request.getSession().setAttribute("currName", user.getName());
-                            request.getSession().setAttribute("user", user); // Store user object in session  
+                            request.getSession().setAttribute("user", user); // Store user object in session    
 
-                            response.sendRedirect("UserPage.jsp"); // Redirect to user dashboard  
+                            response.sendRedirect("UserPage.jsp"); // Redirect to user dashboard    
                         } else {
                             request.setAttribute("error", "NIM or password incorrect");
                             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -114,15 +119,26 @@ public class UserController extends HttpServlet {
                 user.setPhone(request.getParameter("phone"));
                 user.setPassword(request.getParameter("password"));
 
-                // Updating user information
-                user.update(); // Update the user in the database
+                // Updating user information  
+                user.update(); // Update the user in the database  
 
                 request.getSession().setAttribute("msg", "User successfully updated");
-                response.sendRedirect("AdminPage.jsp?menu=user"); // Redirect to user list page
+                response.sendRedirect("AdminPage.jsp?menu=user"); // Redirect to user list page  
             } else {
                 request.getSession().setAttribute("error", "User not found");
                 request.getRequestDispatcher("EditAnggota.jsp").forward(request, response);
             }
+        } else if ("delete".equals(action)) {
+            int nim = Integer.parseInt(request.getParameter("nim")); // Get NIM from request  
+            User user = new User().getById(nim); // Retrieve user by NIM  
+
+            if (user != null) {
+                user.delete(); // Call the delete method to remove the user from the database  
+                request.getSession().setAttribute("msg", "User successfully deleted");
+            } else {
+                request.getSession().setAttribute("error", "User not found");
+            }
+            response.sendRedirect("AdminPage.jsp?menu=user"); // Redirect to user list page  
         } else {
             response.sendRedirect("User");
         }
